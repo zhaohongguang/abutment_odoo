@@ -12,7 +12,7 @@ module AbutmentOdoo
       @username      = options[:username]
     end
 
-    def udi(options = {})
+    def uid(options = {})
       common = XMLRPC::Client.new2("#{@url}/xmlrpc/2/common")
       uid = common.call('authenticate', @database_name, @username, @password, {})
     end
@@ -24,7 +24,7 @@ module AbutmentOdoo
     def operate_models(model_name, operate_type, options = {})
       models = XMLRPC::Client.new2("#{url}/xmlrpc/2/object").proxy
 
-      models.execute_kw(@database_name, uid, @password, "#{model_name}", "#{operate_type}", , )
+      models.execute_kw(@database_name, uid, @password, "#{model_name}", "#{operate_type}", [], {} )
     end
   end
 end
