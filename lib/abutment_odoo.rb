@@ -27,24 +27,37 @@ module AbutmentOdoo
 
     # odoo 接口search 操作
     # @example
-    #   AbutmentOdoo.search('res.partner' {is_company: true, customer: true}) => [1]
+    #   AbutmentOdoo.search('res.partner', { is_company: true, customer: true, offset: 10, limit: 5 }) => [1]
     #
+    # offset: 10, limit: 5 分也和每页的条数
     # @params model_name [String] 模型名字
     # @params options [Hash] 搜索条件
     # @return [Array] ids ID数组
-    def search(model_name, options = {}, records_number = nil )
+    def search(model_name, options = {})
       search_parameter = []
       constraint_condition = { }
+
       options.each do |key, value|
-        search_parameter << [key.to_s, '=', value]
+        if key == 'offset' || key == 'limit'
+          constraint_condition[key] = value
+        else
+          search_parameter << [key.to_s, '=', value]
+        end
       end
 
-      constraint_condition[:limit] = records_number if records_number.present?
       operate_models(model_name, 'search', search_parameter, constraint_condition)
     end
 
-    def read(model_name, ids, options = [])
-      operate_models(model_name, 'search', ids, { fields: options })
+    # odoo 接口read 操作
+    # @example
+    #   AbutmentOdoo.read('res.partner', [id], {fields: ['name', 'country_id', 'id'], offset: 10, limit: 5})
+    #
+    # @params model_name [String] 模型名字
+    # @params ids [Array] ID 数组
+    # @params options [Hash] 模型字段和查询条数
+    # @return [Array] records list
+    def read(model_name, ids, options = { })
+      operate_models(model_name, 'search', ids, options)
     end
 
     # odoo 接口创建记录操作
@@ -72,6 +85,12 @@ module AbutmentOdoo
       create('ir.model', 'create', parameter)
     end
 
+    # 新增模型字段
+    # @example
+    #   AbutmentOdoo.create_models({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true}) => [78]
+    #
+    # @params parameter [Array] 搜索条件
+    # @return int id 返回创建的ID
     def create_fields(parameter = [])
       ids = []
       parameter.each do |item|
