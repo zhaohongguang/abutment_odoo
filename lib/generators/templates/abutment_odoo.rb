@@ -1,6 +1,6 @@
 AbutmentOdoo.configure do |config|
   # Set your odoo url
-  # config.option = url
+  # config.url = url
 
   # Set odoo's database name
   # config.database_name = database_name

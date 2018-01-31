@@ -89,8 +89,8 @@ module AbutmentOdoo
     # @example
     #   AbutmentOdoo.create_models({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true}) => [78]
     #
-    # @params parameter [Array] 搜索条件
-    # @return int id 返回创建的ID
+    # @params parameter [Array] 创建字段的基本数据
+    # @return [Array] ids 返回创建的ID数组
     def create_fields(parameter = [])
       ids = []
       parameter.each do |item|
@@ -101,16 +101,35 @@ module AbutmentOdoo
 
     # 创建记录公共方法
     def create(model_name, operate_type, parameter)
-      models.execute_kw(configuration.database_name, uid, configuration.password, "#{model_name}", "#{operate_type}", [] << parameter)
+      binding.pry
+      models.execute_kw(configuration.database_name, uid, configuration.password, model_name, operate_type, [] << parameter)
+    end
+
+    # 更新数据
+    # @example
+    #   AbutmentOdoo.write('res.partner', 1, { name: "Newer partner" }) => true
+    #
+    # @params model_name [String] 模型名字
+    # @params id [Int] 记录ID
+    # @params options [Hash] 更新记录信息
+    # @return int id 返回创建的ID
+    # TODO 需要验证是否可以传id 数组批量修改
+    def write_records(model_name, id, options)
+      models.execute_kw(configuration.database_name, uid, configuration.password, model_name, 'write', [[id], options] )
+    end
+
+    # TODO 需要验证是否可以传id 数组批量删除
+    def delete_records(model_name, id)
+      models.execute_kw(db, uid, password, 'res.partner', 'unlink', [[id]])
     end
 
     # 获取模型中的字段
     def get_fields(model_name, parameter)
-      operate_models(model_name, 'fields_get', item)
+      operate_models(model_name, 'fields_get', nil, parameter)
     end
 
     def operate_models(model_name, operate_type, parameter, constraint_condition = { })
-      models.execute_kw(configuration.database_name, uid, configuration.password, "#{model_name}", "#{operate_type}", [] << parameter, constraint_condition )
+      models.execute_kw(configuration.database_name, uid, configuration.password, model_name, operate_type, parameter.present? ? [] << parameter : [], constraint_condition )
     end
 
     # 公共方法获取记录
@@ -124,10 +143,10 @@ module AbutmentOdoo
     attr_accessor :url, :database_name, :password, :username
 
     def initialize
-      @url           = ''
-      @database_name = ''
-      @password      = ''
-      @username      = ''
+      @url           = '' # 'https://demo3.odoo.com'
+      @database_name = '' # 'demo_110_1517313697'
+      @password      = '' # 'admin'
+      @username      = '' # 'admin'
     end
   end
 end
