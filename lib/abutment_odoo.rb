@@ -34,18 +34,7 @@ module AbutmentOdoo
     # @params options [Hash] 搜索条件
     # @return [Array] ids ID数组
     def search(model_name, options = {})
-      search_parameter = []
-      constraint_condition = { }
-
-      options.each do |key, value|
-        if key == 'offset' || key == 'limit'
-          constraint_condition[key] = value
-        else
-          search_parameter << [key.to_s, '=', value]
-        end
-      end
-
-      operate_models(model_name, 'search', search_parameter, constraint_condition)
+      select(model_name, 'search', options)
     end
 
     # odoo 接口read 操作
@@ -57,7 +46,34 @@ module AbutmentOdoo
     # @params options [Hash] 模型字段和查询条数
     # @return [Array] records list
     def read(model_name, ids, options = { })
-      operate_models(model_name, 'search', ids, options)
+      operate_models(model_name, 'read', ids, options)
+    end
+
+    # odoo 接口read 操作
+    # @example
+    #   AbutmentOdoo.search_read('res.partner', { is_company: true, customer: true, fields: ['name', 'country_id', 'id'], offset: 10, limit: 5 }
+    #
+    # @params model_name [String] 模型名字
+    # @params options [Hash] 搜索条件和我需要的字段
+    # @return [Array] records list
+    def search_read(model_name, options = { })
+      select(model_name, 'search_read', options)
+    end
+
+    # search 和 search_read 方法的功能方法
+    def select(model_name, operate_type, options = {})
+      search_parameter = []
+      constraint_condition = { }
+
+      options.each do |key, value|
+        if key.to_s == 'offset' || key.to_s == 'limit' || key.to_s == 'fields'
+          constraint_condition[key] = value
+        else
+          search_parameter << [key.to_s, '=', value.to_s]
+        end
+      end
+
+      operate_models(model_name, operate_type, search_parameter, constraint_condition)
     end
 
     # odoo 接口创建记录操作
@@ -101,7 +117,6 @@ module AbutmentOdoo
 
     # 创建记录公共方法
     def create(model_name, operate_type, parameter)
-      binding.pry
       models.execute_kw(configuration.database_name, uid, configuration.password, model_name, operate_type, [] << parameter)
     end
 
