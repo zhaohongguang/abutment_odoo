@@ -129,16 +129,22 @@ module AbutmentOdoo
     # @params options [Hash] 更新记录信息
     # @return int id 返回创建的ID
     # TODO 需要验证是否可以传id 数组批量修改
-    def write_records(model_name, id, options)
-      models.execute_kw(configuration.database_name, uid, configuration.password, model_name, 'write', [[id], options] )
+    def write_records(model_name, ids, options)
+      models.execute_kw(configuration.database_name, uid, configuration.password, model_name, 'write', [ids, options] )
     end
 
     # TODO 需要验证是否可以传id 数组批量删除
     def delete_records(model_name, id)
-      models.execute_kw(db, uid, password, 'res.partner', 'unlink', [[id]])
+      models.execute_kw(db, uid, password, model_name, 'unlink', [[id]])
     end
 
     # 获取模型中的字段
+    # @example
+    #   AbutmentOdoo.get_fields('res.partner', { attributes: %w(string help type) })
+    # @params model_name [String] 模型名字
+    # @params parameter  [Hash] 需要字段信息
+    #
+    # @return Array 返回该模型下面所有字段数组
     def get_fields(model_name, parameter)
       operate_models(model_name, 'fields_get', nil, parameter)
     end

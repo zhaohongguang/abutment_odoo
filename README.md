@@ -22,7 +22,45 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+You'll need to configure it in config/initializers/abutment_odoo.rb
+
+    $ rails g abutment_odoo:install
+
+```ruby
+AbutmentOdoo.configure do |config|
+  # Set your odoo url
+  config.url = 'https://demo.odoo.com'
+
+  # Set odoo's database name
+  config.database_name = 'odoo'
+
+  # Set login user name
+  config.username = 'admin'
+
+  # Set login password
+  config.password = 'admin'
+end
+```
+
+
+## Example
+
+`search()` takes a mandatory domain filter (possibly empty), and returns the database identifiers of all records matching the filter. To list customer companies for instance
+
+By default a search will return the ids of all records matching the condition, which may be a huge number. `offset:` and `limit:` parameters are available to only retrieve a subset of all matched records.
+
+```ruby
+AbutmentOdoo.search('res.partner', { is_company: true, customer: true, offset: 10, limit: 5 })
+```
+
+
+
+`fields_get()` can be used to inspect a model's fields and check which ones seem to be of interest.
+
+```ruby
+AbutmentOdoo.get_fields('res.partner', { attributes: %w(string help type) })
+```
+
 
 ## Development
 
