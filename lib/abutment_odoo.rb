@@ -1,5 +1,6 @@
 require "abutment_odoo/version"
 require "xmlrpc/client"
+require 'base64'
 
 module AbutmentOdoo
 
@@ -22,7 +23,11 @@ module AbutmentOdoo
 
     # Calling methods
     def models
-      models = XMLRPC::Client.new2("#{configuration.url}/xmlrpc/2/object").proxy
+      XMLRPC::Client.new2("#{configuration.url}/xmlrpc/2/object").proxy
+    end
+
+    def report
+      XMLRPC::Client.new2("#{url}/xmlrpc/2/report").proxy
     end
 
     # odoo 接口search 操作
@@ -49,7 +54,7 @@ module AbutmentOdoo
       operate_models(model_name, 'read', ids, options)
     end
 
-    # odoo 接口read 操作
+    # odoo 接口search_read 操作
     # @example
     #   AbutmentOdoo.search_read('res.partner', { is_company: true, customer: true, fields: ['name', 'country_id', 'id'], offset: 10, limit: 5 }
     #
@@ -58,6 +63,17 @@ module AbutmentOdoo
     # @return [Array] records list
     def search_read(model_name, options = { })
       select(model_name, 'search_read', options)
+    end
+
+    # odoo 接口search_read 操作
+    # @example
+    #   AbutmentOdoo.search_count('res.partner', { is_company: true, customer: true })
+    #
+    # @params model_name [String] 模型名字
+    # @params options [Hash] 搜索条件和我需要的字段
+    # @return [Array] records list
+    def search_count(model_name, options = { })
+      select(model_name, 'search_count', options)
     end
 
     # search 和 search_read 方法的功能方法
