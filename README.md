@@ -29,10 +29,10 @@ You'll need to configure it in config/initializers/abutment_odoo.rb
 ```ruby
 AbutmentOdoo.configure do |config|
   # Set your odoo url
-  config.url = 'https://demo.odoo.com'
+  config.url = 'https://demo2.odoo.com'
 
   # Set odoo's database name
-  config.database_name = 'odoo'
+  config.database_name = 'demo_110_1519291233'
 
   # Set login user name
   config.username = 'admin'
@@ -83,7 +83,7 @@ AbutmentOdoo.get_fields('res.partner', { attributes: %w(string help type) })
 
 ```ruby
 # Records of a model are created using create(). The method will create a single record and return its database identifier.
-AbutmentOdoo.create_records('res.partner' [{name: "New Partner"}])
+AbutmentOdoo.create_records('res.partner', [{name: "New Partner"}])
 
 # Records can be updated using write(), return true of false
 AbutmentOdoo.write('res.partner', [1], { name: "Newer partner" })
