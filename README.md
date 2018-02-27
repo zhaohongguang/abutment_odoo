@@ -4,6 +4,8 @@ Welcome to your new gem! In this directory, you'll find the files you need to be
 
 TODO: Delete this and the text above, and describe your gem
 
+[Odoo External API](https://www.odoo.com/documentation/11.0/webservices/odoo.html)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -101,7 +103,7 @@ Create model & Create fields
 ```ruby
 AbutmentOdoo.create_models({model: 'x_custom_model', state: 'manual'})
 
-AbutmentOdoo.create_fields({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true})
+AbutmentOdoo.create_fields([{model_id: id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true}])
 ```
 
 ## Development
