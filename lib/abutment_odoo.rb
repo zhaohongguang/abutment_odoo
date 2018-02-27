@@ -119,7 +119,7 @@ module AbutmentOdoo
 
     # 新增模型字段
     # @example
-    #   AbutmentOdoo.create_models({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true}) => [78]
+    #   AbutmentOdoo.create_fields({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true}) => [78]
     #
     # @params parameter [Array] 创建字段的基本数据
     # @return [Array] ids 返回创建的ID数组

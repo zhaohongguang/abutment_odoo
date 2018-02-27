@@ -101,7 +101,7 @@ Create model & Create fields
 ```ruby
 AbutmentOdoo.create_models({model: 'x_custom_model', state: 'manual'})
 
-AbutmentOdoo.create_models({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true})
+AbutmentOdoo.create_fields({'model_id': id, name: 'x_cloumn_name', ttype: 'char', state: "manual", required: true})
 ```
 
 ## Development
